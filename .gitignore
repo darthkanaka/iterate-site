@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+
+# Not ours to publish: Evolve HI client collateral that lived on the Elevate
+# domain. Kept locally in harvest/pages/ so nothing is lost.
+harvest/pages/proposal-roofing-client.html
+
+# Names a business the case studies keep anonymous until the client approves.
+harvest/screens/about-3.png
+
+# Squarespace export, if one is ever pulled. It carries form submissions and
+# account details that have no business in a public repo.
+harvest/export/
+
+# Named case study copy, public only once each client approves.
+private/
