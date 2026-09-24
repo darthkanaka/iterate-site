@@ -95,8 +95,11 @@ def favicons():
     """Raster favicons of the mark, from the same parsed rectangles."""
     from PIL import Image, ImageDraw
     W, H, shapes = parse("harvest/brand/evolve/Evolve-Icon-Black.pdf")
-    for size, name, bg in ((32, "favicon-32.png", None), (180, "favicon-180.png", "#F0EEE8"),
-                           (512, "mark-512.png", None)):
+    # The browser tab icon is the banyan HI (favicon-32/192.png and favicon.ico,
+    # made from harvest/photos/backgrounds/Icon_Tree.png). This makes the flat
+    # navy mark only where a photo would not read: the home screen icon and
+    # the logo in search results.
+    for size, name, bg in ((180, "favicon-180.png", "#F0EEE8"), (512, "mark-512.png", None)):
         pad = size * 0.1
         scale = (size - pad * 2) / max(W, H)
         ox = (size - W * scale) / 2
