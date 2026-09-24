@@ -17,7 +17,7 @@
 
   /* Where enquiries go. One address, swapped here when the Workspace moves. */
   var TO = "aloha@iteratehi.com";
-  var TEL = "(808) 201-4040";
+  var TEL = "(808) 204-4575";
 
   /* -- Shared gate ------------------------------------------------------- */
 

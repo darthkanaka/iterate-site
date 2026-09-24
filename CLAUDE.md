@@ -36,7 +36,7 @@ Natural and spoken, contractions on, no marketing filler, and no em dashes anywh
 | Form backend | Add `data-endpoint` to the `<form>`; site.js posts there and keeps mailto as the fallback | A backend is chosen (the Elevate Apps Script is the obvious one) |
 | Case study names | Anonymous headings only in index.html. Named versions are in `private/case-studies-named.md` (git-ignored) | Each client approves being named |
 | Indexing | The `TODO-LAUNCH` robots line in every page head | Cutover to iteratehi.com |
-| Phone | `(808) 201-4040` in the footer (not the nav, by Kawika's choice), contact page, terms, JSON-LD and `TEL` in site.js | Only if the number changes |
+| Phone | `(808) 204-4575` in the footer (not the nav, by Kawika's choice), contact page, terms, JSON-LD and `TEL` in site.js | Only if the number changes |
 
 Client names do not appear anywhere in this public repo until that client has approved it. That includes commit messages.
 

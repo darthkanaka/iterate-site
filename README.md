@@ -28,7 +28,7 @@ Then open http://localhost:8778.
 
 ## Before launch
 
-- [ ] Kawika moves (808) 201-4040 off the Invisible Arts receptionist in Retell, so the number on the site reaches Iterate.
+- [ ] Forward (808) 204-4575 in Twilio to Kawika's cell and test a call.
 - [ ] The `aloha@iteratehi.com` forwarder exists in Namecheap and a test message arrives.
 - [ ] Remove the `TODO-LAUNCH` robots line from every page.
 - [ ] Add a `CNAME` file with `iteratehi.com` and the DNS records in the vault note.
