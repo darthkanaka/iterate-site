@@ -62,6 +62,12 @@ def parse(path):
             cur.append("Z")
         elif t == "re":
             x, y, w, h = a
+            # Draw every rectangle the same way round. The mark has rectangles
+            # with negative width or height, and where one of those overlaps a
+            # normal one, the nonzero fill rule reads opposite windings as
+            # cancelling, which left hairline gaps inside the HI.
+            if w < 0: x, w = x + w, -w
+            if h < 0: y, h = y + h, -h
             cur.append("M" + pt(x, y) + " L" + pt(x + w, y) + " L" + pt(x + w, y + h) + " L" + pt(x, y + h) + " Z")
         elif t in ("f", "F", "f*"):
             shapes.append(("evenodd" if t == "f*" else "nonzero", " ".join(cur)))
