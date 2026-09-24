@@ -674,6 +674,7 @@ p:last-child { margin-bottom: 0; }
   position: absolute;
   inset: 0;
   z-index: -1;
+  border-radius: inherit;
   background: rgba(247, 246, 242, .8);
   transition: background-color .5s var(--ease);
 }
@@ -682,9 +683,12 @@ p:last-child { margin-bottom: 0; }
 .card p { margin: 0; max-width: 28ch; font-size: 1.06rem; }
 .card-body { display: grid; gap: 20px; justify-items: center; transform: translateZ(28px); }
 
+/* With preserve-3d on the card, Chrome stops clipping children to the
+   rounded corners, so every layer inside carries the radius itself. */
 .card-glare {
   position: absolute;
   inset: 0;
+  border-radius: inherit;
   z-index: 2;
   pointer-events: none;
   opacity: 0;
