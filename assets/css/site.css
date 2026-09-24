@@ -210,7 +210,14 @@ p:last-child { margin-bottom: 0; }
   gap: 12px;
   min-height: 56px;
   padding: 14px clamp(28px, 3.4vw, 54px);
-  background: var(--btn-bg);
+  /* The fill wipes up from the bottom, as on the Elevate site, but painted as
+     a background rather than a ::before layer. A separate layer inside a
+     rounded, overflow-hidden button that the magnetic effect is moving gets
+     drawn out of place in Safari for a few frames and then slides back: the
+     offset block Kawika saw. A background has nothing to fall behind. */
+  background:
+    linear-gradient(var(--btn-wipe), var(--btn-wipe)) left bottom / 100% 0% no-repeat,
+    var(--btn-bg);
   color: var(--btn-fg);
   font-family: var(--btn);
   font-size: 1rem;
@@ -220,23 +227,12 @@ p:last-child { margin-bottom: 0; }
   border: 0;
   border-radius: var(--r);
   cursor: pointer;
-  overflow: hidden;
-  isolation: isolate;
-  transition: color .35s var(--ease);
-  will-change: transform;
+  transition: color .35s var(--ease), background-size .45s var(--ease);
 }
-/* The fill wipes up from the bottom, carried over from the Elevate site. */
-.btn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--btn-wipe);
-  transform: translateY(101%);
-  transition: transform .45s var(--ease);
+.btn:hover, .btn:focus-visible {
+  color: var(--btn-wipe-fg);
+  background-size: 100% 100%, auto;
 }
-.btn:hover::before, .btn:focus-visible::before { transform: translateY(0); }
-.btn:hover, .btn:focus-visible { color: var(--btn-wipe-fg); }
 
 .btn-light { --btn-bg: var(--paper); --btn-fg: var(--ink); --btn-wipe: var(--accent); --btn-wipe-fg: var(--ink); }
 .on-ink .btn { --btn-wipe: var(--paper); --btn-wipe-fg: var(--ink); }
