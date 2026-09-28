@@ -31,7 +31,7 @@ Then open http://localhost:8778.
 - [ ] The `aloha@iteratehi.com` forwarder exists in Namecheap and a test message arrives.
 - [x] Remove the `TODO-LAUNCH` robots line from every page.
 - [x] Add a `CNAME` file with `iteratehi.com`, plus `robots.txt` and `sitemap.xml`.
-- [ ] Add the DNS records in the vault note at Namecheap, then enforce HTTPS.
+- [x] Add the DNS records in the vault note at Namecheap, then enforce HTTPS.
 - [ ] Point evolve-hi.com at iteratehi.com without touching its mail records.
 
 Working notes and decisions: `~/Documents/Obsidian/projects/iterate-site.md`. Conventions for working in this repo: `CLAUDE.md`.
