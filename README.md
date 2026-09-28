@@ -2,8 +2,7 @@
 
 Marketing site for Iterate, practical AI for Hawaiʻi businesses. Four pages plus a privacy and terms page, static, on GitHub Pages.
 
-- Staging: https://darthkanaka.github.io/iterate-site/
-- Production: https://iteratehi.com/ (not yet pointed)
+- Production: https://iteratehi.com/ (the `CNAME` file sets it; DNS is at Namecheap)
 
 ## What is here
 
@@ -30,8 +29,9 @@ Then open http://localhost:8778.
 
 - [ ] Forward (808) 204-4575 in Twilio to Kawika's cell and test a call.
 - [ ] The `aloha@iteratehi.com` forwarder exists in Namecheap and a test message arrives.
-- [ ] Remove the `TODO-LAUNCH` robots line from every page.
-- [ ] Add a `CNAME` file with `iteratehi.com` and the DNS records in the vault note.
+- [x] Remove the `TODO-LAUNCH` robots line from every page.
+- [x] Add a `CNAME` file with `iteratehi.com`, plus `robots.txt` and `sitemap.xml`.
+- [ ] Add the DNS records in the vault note at Namecheap, then enforce HTTPS.
 - [ ] Point evolve-hi.com at iteratehi.com without touching its mail records.
 
 Working notes and decisions: `~/Documents/Obsidian/projects/iterate-site.md`. Conventions for working in this repo: `CLAUDE.md`.

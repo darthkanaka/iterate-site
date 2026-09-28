@@ -1,6 +1,6 @@
 # Iterate site
 
-The marketing site for Iterate, Kawika's AI automation business, rebuilt on 2026-09-23 from the expired Evolve HI Squarespace site. Staging is `https://darthkanaka.github.io/iterate-site/`; production will be `https://iteratehi.com/`. The vault note is `~/Documents/Obsidian/projects/iterate-site.md`: read it first for status, decisions and what is waiting on Kawika.
+The marketing site for Iterate, Kawika's AI automation business, rebuilt on 2026-09-23 from the expired Evolve HI Squarespace site. Production is `https://iteratehi.com/` (custom domain set 2026-09-28 by the `CNAME` file); the old staging URL `https://darthkanaka.github.io/iterate-site/` now redirects there. The vault note is `~/Documents/Obsidian/projects/iterate-site.md`: read it first for status, decisions and what is waiting on Kawika.
 
 It is built the same way as `~/Documents/Developer/elevate-site`. When something here is unclear, that repo is the reference.
 
@@ -11,7 +11,7 @@ It is built the same way as `~/Documents/Developer/elevate-site`. When something
 - `assets/js/site.js` is one IIFE per effect behind a shared gate (`reduced`, `fine`, `wide`, `visibleLoop`, `fitCanvas`, `onView`). Any effect can be deleted without touching the others.
 - GSAP 3.13 and ScrollTrigger from cdnjs, used only for the pinned case study rail and the photo drift. The page must be complete without them.
 - Fonts are self-hosted in `assets/fonts/`: Oswald and Roboto (variable) and Poppins 500 and 600. No Google Fonts link.
-- Hosting is GitHub Pages from the root of `main`. Internal links are relative (`about.html`, never `/about`), because staging lives on a subpath.
+- Hosting is GitHub Pages from the root of `main`. Internal links are relative (`about.html`, never `/about`), so the site also works from a subpath or a local preview.
 
 ## Rules this codebase keeps
 
@@ -35,7 +35,6 @@ Natural and spoken, contractions on, no marketing filler, and no em dashes anywh
 | Enquiry address | `TO` at the top of site.js, plus the `mailto:` links in the footer and on the contact page | Google Workspace moves to iteratehi.com |
 | Form backend | Add `data-endpoint` to the `<form>`; site.js posts there and keeps mailto as the fallback | A backend is chosen (the Elevate Apps Script is the obvious one) |
 | Case study names | Anonymous headings only in index.html. Named versions are in `private/case-studies-named.md` (git-ignored) | Each client approves being named |
-| Indexing | The `TODO-LAUNCH` robots line in every page head | Cutover to iteratehi.com |
 | Phone | `(808) 204-4575` in the footer (not the nav, by Kawika's choice), contact page, terms, JSON-LD and `TEL` in site.js | Only if the number changes |
 
 Client names do not appear anywhere in this public repo until that client has approved it. That includes commit messages.
