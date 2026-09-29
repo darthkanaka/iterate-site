@@ -11,7 +11,8 @@ It is built the same way as `~/Documents/Developer/elevate-site`. When something
 - `assets/js/site.js` is one IIFE per effect behind a shared gate (`reduced`, `fine`, `wide`, `visibleLoop`, `fitCanvas`, `onView`). Any effect can be deleted without touching the others.
 - GSAP 3.13 and ScrollTrigger from cdnjs, used only for the pinned case study rail and the photo drift. The page must be complete without them.
 - Fonts are self-hosted in `assets/fonts/`: Oswald and Roboto (variable) and Poppins 500 and 600. No Google Fonts link.
-- Hosting is GitHub Pages from the root of `main`. Internal links are relative (`about.html`, never `/about`), so the site also works from a subpath or a local preview.
+- Hosting is GitHub Pages from the root of `main`, which is production: every push to `main` is live on iteratehi.com within a minute or two. Internal links are relative (`about.html`, never `/about`), so the site also works from a subpath or a local preview.
+- Launch checkpoint: tag `launch-2026-09-28`. Its GitHub release carries full-page screenshots of every page at desktop and mobile. `git checkout launch-2026-09-28` returns to the site as launched.
 
 ## Rules this codebase keeps
 
