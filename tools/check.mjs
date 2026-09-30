@@ -55,12 +55,15 @@ for (const width of WIDTHS) {
   for (const path of PAGES) {
     const page = await ctx.newPage();
     const errs = [];
-    page.on("pageerror", (e) => errs.push(e.message));
-    // Cloudflare's person-check widget (phone demo) trips over its own blob URLs in Playwright's
-    // WebKit. It still works (checked live), so that one message is not ours to fix.
-    const cloudflareNoise = (t) => /blob:https:\/\/challenges\.cloudflare\.com|WebKitBlobResource/.test(t);
-    page.on("console", (m) => { if (m.type() === "error" && !cloudflareNoise(m.text())) errs.push(m.text()); });
-    page.on("requestfailed", (r) => { if (!cloudflareNoise(r.url())) errs.push("request failed " + r.url()); });
+    page.on("pageerror", (e) => { if (!/challenges\.cloudflare\.com" from accessing a frame/.test(e.message)) errs.push(e.message); }); // WebKit reports Cloudflare's frame reaching for ours as a page error
+    // Cloudflare's person check (phone demo) runs in its own frame. On the live site it treats
+    // an automated browser as a bot and its challenge logs errors and failed requests; in
+    // Playwright's WebKit it also trips over its own blob URLs. None of that is our code, so
+    // anything coming from Cloudflare's frame or hosts is left out.
+    const fromCloudflare = (u) => /^(blob:)?https:\/\/([a-z0-9-]+\.)*challenges\.cloudflare\.com\//.test(u || "");
+    const cloudflareNoise = (m) => fromCloudflare(m.location().url) || /WebKitBlobResource|challenges\.cloudflare\.com" from accessing a frame/.test(m.text());
+    page.on("console", (m) => { if (m.type() === "error" && !cloudflareNoise(m)) errs.push(m.text() + (m.location().url ? ` (${m.location().url.slice(0, 80)})` : "")); });
+    page.on("requestfailed", (r) => { if (!fromCloudflare(r.url())) errs.push("request failed " + r.url()); });
     // The person check on the phone demo keeps a connection open, so that page never goes network idle.
     await page.goto(BASE + path, { waitUntil: path === "demos/phone.html" ? "load" : "networkidle" });
     await scrollThrough(page);
