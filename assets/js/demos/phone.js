@@ -137,7 +137,7 @@
       S.phone = $("#real-phone").value.trim();
       S.consent = $("#real-consent").checked;
     }
-    if (!S.token) { S.error = "One moment, the quick person check hasn't finished. Try again in a second."; return renderSetup("#start-error"); }
+    if (!S.token) { S.error = "One moment. The person check above hasn't finished yet. If it shows a box to tick, tick it, then start again."; return renderSetup("#start-error"); }
     S.starting = true;
     S.error = "";
     renderSetup();

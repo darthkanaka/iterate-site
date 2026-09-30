@@ -417,7 +417,7 @@ console.log("\nfunctional, desktop 1280: real texts, resting, person check");
   await page.goto(URL, { waitUntil: "load" });
   await ready(page);
   await page.click(".start-btn");
-  expect("the person check not done yet", await txt(page, "#start-error"), "One moment, the quick person check hasn't finished. Try again in a second.");
+  expect("the person check not done yet", await txt(page, "#start-error"), "One moment. The person check above hasn't finished yet. If it shows a box to tick, tick it, then start again.");
   expect("focus on the message", await active(page), "start-error");
   await ctx.close();
 }
