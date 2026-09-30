@@ -123,10 +123,7 @@
     var menu = $(".nav-menu");
     if (!burger || !menu) return;
 
-    var lastFocus = null;
-
     function open() {
-      lastFocus = document.activeElement;
       menu.hidden = false;
       burger.setAttribute("aria-expanded", "true");
       document.body.classList.add("menu-open");
@@ -134,10 +131,13 @@
       if (first) first.focus();
     }
     function close() {
+      var inside = menu.contains(document.activeElement) || document.activeElement === burger;
       menu.hidden = true;
       burger.setAttribute("aria-expanded", "false");
       document.body.classList.remove("menu-open");
-      if (lastFocus) lastFocus.focus();
+      // Back to the burger. Safari doesn't focus a button when it's tapped, so "whatever had
+      // focus before the menu opened" is the page itself there.
+      if (inside) burger.focus();
     }
     function isOpen() { return burger.getAttribute("aria-expanded") === "true"; }
 
