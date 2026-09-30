@@ -24,6 +24,17 @@ It is built the same way as `~/Documents/Developer/elevate-site`. When something
 6. `harvest/` is the archive of the old site. Things are generated from it, never written into it.
 7. Every page passes axe with zero violations at 1440, 1024 and 390, with JavaScript off, and with reduced motion on.
 
+## Demos
+
+Interactive example apps live under `demos/`, one folder per demo, each linked from its case study card. Work happens on the `demos` branch; plan and status are in the vault note `projects/iterate-demos.md`.
+
+- `demos/handyman.html` is the handyman team app, rebuilt on 2026-09-29 in the same frame as the other demos from the original mockup (kept, untouched, in git-ignored `private/handyman-demo-original/`). It keeps its core tools: Kai the assistant, the tech pay sheet and the field guides for the owner; field guides and My pay for the tech. His field guides and assistant answers live in `handyman-data.js`; `handyman-logic.js` holds the pay math, the assistant's keyword matching and a small escaped text renderer. Tests: `tools/test-handyman-logic.mjs` and `tools/check-handyman.mjs`.
+- Every name, business, address and price in a demo is made up and checked against real Hawaiʻi businesses. No client names, ever.
+- `demos/inventory.html` is a site page (nav, footer, intro, "Built for this business", closing band) around the app in `assets/js/demos/inventory.js`. Its made-up kitchen lives in `inventory-data.js` and every number goes through `inventory-math.js`, which is plain functions with no DOM. Styles are in `assets/css/demos.css`, shared by the demos that sit inside site pages.
+- `demos/portal.html` is built the same way: `portal-data.js` (the made-up studio, its week of shifts and a year of invoices; "today" is Aug 17, 2026 so month, quarter and year to date differ), `portal-logic.js` (shift hours, double-bookings, what needs the owner, invoices built from worked shifts, totals, finance by date range) and `portal.js` (the app, with a "View as" switch: the contractor gets My schedule, as a list or a week calendar, and My invoices; the owner gets the schedule board, Approvals and Finance). The "Google Calendar sync" badges, with their pulsing green dot, are illustration only. Tests: `tools/test-portal-logic.mjs` and `tools/check-portal.mjs`.
+- `demos/phone.html` is the only demo with a server. The page (`phone.js`, plus `phone-logic.js`, which keeps the whole voice transcript when Retell sends only the last few lines) talks to the Iterate demos API on Railway, private repo `darthkanaka/iterate-demos-api` at `~/Documents/Developer/iterate-demos-api`. Read that repo's README before touching the phone demo. The API starts real Retell text chats and browser voice calls with a demo copy of the after-hours agent and hands the agent's alert back to the page. The real Cloudflare person check only runs on iteratehi.com. Previews anywhere else use Cloudflare's always-pass test key, which the API accepts only while it's set up for review. `?api=local` points the page at an API on this machine. Real texts stay off until the API's `DEMO_REAL_SMS` is on, and an SMS clause goes into terms.html (the consent line links `terms.html#sms`) before that. Tests: `tools/test-phone-logic.mjs` and `tools/check-phone.mjs`, which stubs the API, the person check and the voice SDK, so it never reaches Retell or costs anything.
+- Every demo ships with a full functional test, not just an accessibility pass: `node --test tools/test-inventory-math.mjs` checks the math against hand-worked numbers, and `node tools/check-inventory.mjs` drives every control in a browser on desktop and phone, checks each number on screen, then runs axe in every state plus JS off and reduced motion. Both must pass before anything merges.
+
 ## Voice
 
 Natural and spoken, contractions on, no marketing filler, and no em dashes anywhere. Don't invent facts, figures or results. The case studies say only what the vault records.
@@ -47,6 +58,9 @@ python3 -m http.server 8778                       # preview at http://localhost:
 python3 tools/vector.py <in.pdf|.ai> <out.svg>    # brand vector to a currentColor SVG
 python3 tools/vector.py --favicons                # favicons and mark-512.png from the HI mark
 node tools/check.mjs [base-url]                   # axe, overflow, JS off, reduced motion, rail
+node --test tools/test-*.mjs                      # every demo's logic
+node tools/check-<demo>.mjs                       # one demo, every control: inventory, portal, handyman, phone
+BROWSER=webkit node tools/check-<demo>.mjs        # the same in Safari's engine (or BROWSER=firefox); works for check.mjs too
 ```
 
 `tools/check.mjs` needs Playwright. Install it outside the repo (`npm i playwright` in any scratch folder, then run with `NODE_PATH` pointing at it) so the site stays dependency free.

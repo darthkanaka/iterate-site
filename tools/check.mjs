@@ -11,10 +11,13 @@
 
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-const { chromium } = require("playwright");
+const playwright = require("playwright");
+// BROWSER=webkit (Safari's engine) or BROWSER=firefox runs the same checks there. Firefox
+// has no phone mode, so its "phone" runs are a narrow desktop window.
+const ENGINE = process.env.BROWSER || "chromium";
 
 const BASE = (process.argv[2] || "http://localhost:8778/").replace(/\/?$/, "/");
-const PAGES = ["", "what-we-do.html", "about.html", "contact.html", "terms.html"];
+const PAGES = ["", "what-we-do.html", "about.html", "contact.html", "terms.html", "demos/handyman.html", "demos/inventory.html", "demos/phone.html", "demos/portal.html"];
 const WIDTHS = [1440, 1024, 390];
 const AXE = "https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.10.3/axe.min.js";
 
@@ -32,7 +35,9 @@ async function scrollThrough(page) {
   await page.evaluate(() => window.scrollTo(0, 0));
 }
 
-const browser = await chromium.launch();
+const browser = await playwright[ENGINE].launch();
+if (ENGINE === "firefox") { const plain = browser.newContext.bind(browser); browser.newContext = ({ isMobile, ...o } = {}) => plain(o); }
+console.log(`engine: ${ENGINE}`);
 
 for (const width of WIDTHS) {
   console.log(`\n${width}px`);
@@ -41,13 +46,23 @@ for (const width of WIDTHS) {
     viewport: { width, height: mobile ? 844 : 900 },
     hasTouch: mobile, isMobile: mobile,
   });
+  // The phone demo asks the demos API if it's up. Answer for it, so this check doesn't depend
+  // on the API running (tools/check-phone.mjs covers the demo itself).
+  await ctx.route(/localhost:8787\/|iterate-demos-api/, (route) => route.fulfill({
+    status: 200, headers: { "access-control-allow-origin": "*", "content-type": "application/json" },
+    body: JSON.stringify({ ok: true, chat: true, voice: true, real_sms: false }),
+  }));
   for (const path of PAGES) {
     const page = await ctx.newPage();
     const errs = [];
     page.on("pageerror", (e) => errs.push(e.message));
-    page.on("console", (m) => { if (m.type() === "error") errs.push(m.text()); });
-    page.on("requestfailed", (r) => errs.push("request failed " + r.url()));
-    await page.goto(BASE + path, { waitUntil: "networkidle" });
+    // Cloudflare's person-check widget (phone demo) trips over its own blob URLs in Playwright's
+    // WebKit. It still works (checked live), so that one message is not ours to fix.
+    const cloudflareNoise = (t) => /blob:https:\/\/challenges\.cloudflare\.com|WebKitBlobResource/.test(t);
+    page.on("console", (m) => { if (m.type() === "error" && !cloudflareNoise(m.text())) errs.push(m.text()); });
+    page.on("requestfailed", (r) => { if (!cloudflareNoise(r.url())) errs.push("request failed " + r.url()); });
+    // The person check on the phone demo keeps a connection open, so that page never goes network idle.
+    await page.goto(BASE + path, { waitUntil: path === "demos/phone.html" ? "load" : "networkidle" });
     await scrollThrough(page);
     const name = path || "index.html";
 
