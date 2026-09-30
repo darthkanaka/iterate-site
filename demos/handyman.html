@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Handyman Team App Demo | Iterate</title>
+<meta name="description" content="Try the team app we built for a handyman company, from the office and from the field. An AI assistant, the weekly pay sheet and step-by-step job guides.">
+<link rel="canonical" href="https://iteratehi.com/demos/handyman">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Handyman Team App Demo | Iterate">
+<meta property="og:description" content="Try the team app we built for a handyman company, from the office and from the field. An AI assistant, the weekly pay sheet and step-by-step job guides.">
+<meta property="og:image" content="https://iteratehi.com/assets/img/og.jpg">
+<meta property="og:url" content="https://iteratehi.com/demos/handyman">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f0eee8">
+
+<link rel="icon" href="../assets/img/icon-tree-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="../assets/img/icon-tree-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="../assets/img/favicon-180.png">
+
+<link rel="preload" href="../assets/fonts/oswald.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/roboto.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="stylesheet" href="../assets/css/demos.css">
+
+<script>document.documentElement.className += " js";</script>
+</head>
+<body>
+
+<!-- The HI mark, defined once and referenced everywhere. -->
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <symbol id="mark" viewBox="0 0 160 153.005"><path fill="currentColor" d="M69.071 31.912 L160.000 31.912 L160.000 0.000 L69.071 0.000 Z M0.000 153.005 L58.590 153.005 L58.590 121.093 L0.000 121.093 Z M69.071 153.005 L160.000 153.005 L160.000 121.093 L69.071 121.093 Z M30.382 121.124 L69.071 121.124 L69.071 82.435 L30.382 82.435 Z M30.382 71.954 L69.071 71.954 L69.071 31.912 L30.382 31.912 Z M99.453 127.744 L129.617 127.744 L129.617 22.021 L99.453 22.021 Z M0.000 31.912 L58.590 31.912 L58.590 0.000 L0.000 0.000 Z M30.383 37.389 L58.590 37.389 L58.590 22.021 L30.383 22.021 Z M30.383 128.765 L58.590 128.765 L58.590 111.559 L30.383 111.559 Z"/></symbol>
+  </defs>
+</svg>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="../index.html" aria-label="Iterate, home"><!-- WORDMARK-SWAP: the wordmark is assets/img/wordmark.svg, drawn through a CSS mask. --><span class="wordmark" aria-hidden="true"></span><svg class="mark" viewBox="0 0 160 153.005" aria-hidden="true" focusable="false"><use href="#mark"/></svg></a>
+
+    <div class="nav-right">
+      <nav aria-label="Main">
+        <ul class="nav-links">
+          <li><a href="../what-we-do.html">What We Do</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <a class="btn btn-sm" href="../contact.html" data-magnetic><span>Let's Connect</span></a>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Menu">
+        <span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<nav class="nav-menu" id="menu" hidden aria-label="Mobile">
+  <a href="../index.html">Home</a>
+  <a href="../what-we-do.html">What We Do</a>
+  <a href="../about.html">About</a>
+  <a href="../contact.html">Contact</a>
+  <a class="btn" href="../contact.html"><span>Let's Connect</span></a>
+</nav>
+
+<main id="main">
+  <section class="page-hero demo-hero">
+    <div class="wrap">
+      <a class="tlink demo-back" href="../index.html#work">Back to our work</a>
+      <span class="kicker">Live demo</span>
+      <h1 class="h1">One app for the office and the crew</h1>
+      <p class="lede">A working copy of the app we built for a handyman company, running on a made-up one called Coralgate Home Services. Switch between the owner and a tech to see both sides. Nothing you change is saved.</p>
+      <ol class="demo-try">
+        <li>As Leilani, ask Kai what's on today, or who owes the company money.</li>
+        <li>Open Tech pay. Assign the invoice with no tech on it, finalize Jordan's lines and mark someone paid.</li>
+        <li>Switch to Malia. Walk through a field guide, then check My pay and leave the office a note.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="demo-stage" aria-label="Handyman team app demo">
+    <div class="wrap-wide">
+      <noscript>
+        <div class="demo-nojs">
+          <p><strong>This demo runs in your browser and needs JavaScript.</strong> Turn it on to ask the assistant, run the pay sheet and walk through a job.</p>
+        </div>
+      </noscript>
+      <div class="app" id="handyman-app"></div>
+    </div>
+  </section>
+
+  <section class="sec-tight demo-why">
+    <div class="wrap">
+      <span class="kicker">Built for this business</span>
+      <h2 class="h2">The office and the field, on the same page</h2>
+      <ul class="why-grid why-four">
+        <li><h3>The office asks, the assistant answers</h3><p>Today's schedule, open requests, who owes money and a draft quote, pulled from the systems the business already runs on.</p></li>
+        <li><h3>Every job done the same way</h3><p>Step-by-step guides with the gear, the safety checks and the flat-rate price built in, so a new hire works like a veteran.</p></li>
+        <li><h3>Pay works itself out</h3><p>Each tech's share comes straight from the invoices. The office checks it, locks it and marks it paid.</p></li>
+        <li><h3>Everyone sees only their part</h3><p>A tech gets the guides and their own pay. The office gets the rest. Nobody wades through screens that aren't for them.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec-tight on-ink demo-cta">
+    <div class="wrap">
+      <h2 class="h2">What would yours look like?</h2>
+      <p>Every business runs a little differently. Tell us how yours works and we'll talk through what a system built around it could do.</p>
+      <a class="btn" href="../contact.html" data-magnetic><span>Let's Connect</span><svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap-wide">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="../index.html" aria-label="Iterate, home"><!-- WORDMARK-SWAP: the wordmark is assets/img/wordmark.svg, drawn through a CSS mask. --><span class="wordmark" aria-hidden="true"></span><svg class="mark" viewBox="0 0 160 153.005" aria-hidden="true" focusable="false"><use href="#mark"/></svg></a>
+        <p class="footer-blurb">At Iterate, we solve real business problems with practical AI tools. We automate repetitive tasks, streamline workflows, and improve efficiency. Our solutions are simple, effective, and built to deliver results.</p>
+      </div>
+      <ul class="footer-links">
+        <li><a class="tlink" href="../what-we-do.html">What We Do</a></li>
+        <li><a class="tlink" href="../about.html">About</a></li>
+        <li><a class="tlink" href="../contact.html">Contact</a></li>
+      </ul>
+      <div class="footer-contact">
+        <a class="tlink" href="mailto:aloha@iteratehi.com">aloha@iteratehi.com</a>
+        <a class="tlink" href="tel:+18082044575">(808) 204-4575</a>
+      </div>
+    </div>
+    <div class="footer-bot">
+      <p>&copy; <span data-year>2026</span> Iterate. Honolulu, Hawaiʻi.</p>
+      <p><a class="tlink" href="../terms.html">Privacy and Terms</a></p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" defer></script>
+<script src="../assets/js/site.js" defer></script>
+<script src="../assets/js/demos/handyman-logic.js" defer></script>
+<script src="../assets/js/demos/handyman-data.js" defer></script>
+<script src="../assets/js/demos/handyman.js" defer></script>
+</body>
+</html>

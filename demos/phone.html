@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>After-Hours Phone Agent Demo | Iterate</title>
+<meta name="description" content="Talk to or chat with a real after-hours phone agent for an emergency repair company, and watch it text the on-call tech.">
+<link rel="canonical" href="https://iteratehi.com/demos/phone">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="After-Hours Phone Agent Demo | Iterate">
+<meta property="og:description" content="Talk to or chat with a real after-hours phone agent for an emergency repair company, and watch it text the on-call tech.">
+<meta property="og:image" content="https://iteratehi.com/assets/img/og.jpg">
+<meta property="og:url" content="https://iteratehi.com/demos/phone">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f0eee8">
+
+<link rel="icon" href="../assets/img/icon-tree-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="../assets/img/icon-tree-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="../assets/img/favicon-180.png">
+
+<link rel="preload" href="../assets/fonts/oswald.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/roboto.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="stylesheet" href="../assets/css/demos.css">
+
+<script>document.documentElement.className += " js";</script>
+</head>
+<body>
+
+<!-- The HI mark, defined once and referenced everywhere. -->
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <symbol id="mark" viewBox="0 0 160 153.005"><path fill="currentColor" d="M69.071 31.912 L160.000 31.912 L160.000 0.000 L69.071 0.000 Z M0.000 153.005 L58.590 153.005 L58.590 121.093 L0.000 121.093 Z M69.071 153.005 L160.000 153.005 L160.000 121.093 L69.071 121.093 Z M30.382 121.124 L69.071 121.124 L69.071 82.435 L30.382 82.435 Z M30.382 71.954 L69.071 71.954 L69.071 31.912 L30.382 31.912 Z M99.453 127.744 L129.617 127.744 L129.617 22.021 L99.453 22.021 Z M0.000 31.912 L58.590 31.912 L58.590 0.000 L0.000 0.000 Z M30.383 37.389 L58.590 37.389 L58.590 22.021 L30.383 22.021 Z M30.383 128.765 L58.590 128.765 L58.590 111.559 L30.383 111.559 Z"/></symbol>
+  </defs>
+</svg>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="../index.html" aria-label="Iterate, home"><!-- WORDMARK-SWAP: the wordmark is assets/img/wordmark.svg, drawn through a CSS mask. --><span class="wordmark" aria-hidden="true"></span><svg class="mark" viewBox="0 0 160 153.005" aria-hidden="true" focusable="false"><use href="#mark"/></svg></a>
+
+    <div class="nav-right">
+      <nav aria-label="Main">
+        <ul class="nav-links">
+          <li><a href="../what-we-do.html">What We Do</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <a class="btn btn-sm" href="../contact.html" data-magnetic><span>Let's Connect</span></a>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Menu">
+        <span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<nav class="nav-menu" id="menu" hidden aria-label="Mobile">
+  <a href="../index.html">Home</a>
+  <a href="../what-we-do.html">What We Do</a>
+  <a href="../about.html">About</a>
+  <a href="../contact.html">Contact</a>
+  <a class="btn" href="../contact.html"><span>Let's Connect</span></a>
+</nav>
+
+<main id="main">
+  <section class="page-hero demo-hero">
+    <div class="wrap">
+      <a class="tlink demo-back" href="../index.html#work">Back to our work</a>
+      <span class="kicker">Live demo</span>
+      <h1 class="h1">An after-hours line for emergency calls</h1>
+      <p class="lede">This is a real phone agent, set up for a made-up restoration company called Island Emergency Restoration. Tell it what's wrong, by typing or out loud. If it's an emergency, it takes your name and number and texts the on-call tech. Nobody will actually call you back.</p>
+      <ol class="demo-try">
+        <li>Pick chat or voice, and keep the alert on the phone on this page.</li>
+        <li>Tell it something's leaking, flooding or coming through the ceiling.</li>
+        <li>Give it a name and the sample number 808 555 0142, then watch the on-call phone.</li>
+        <li>Start over and ask for an estimate, or say something's on fire, and see what it does instead.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="demo-stage" aria-label="After-hours phone agent demo">
+    <div class="wrap-wide">
+      <noscript>
+        <div class="demo-nojs">
+          <p><strong>This demo runs in your browser and needs JavaScript.</strong> Turn it on to chat with or call the agent. The example call below shows how it goes.</p>
+        </div>
+      </noscript>
+      <div class="app" id="phone-app" data-api="https://iterate-demos-api-production.up.railway.app" data-api-local="http://localhost:8787" data-sitekey="0x4AAAAAAFJf99kMYZMIv9g3"></div>
+    </div>
+  </section>
+
+  <section class="sec-tight demo-example" aria-labelledby="example-title">
+    <div class="wrap">
+      <span class="kicker">An example call</span>
+      <h2 class="h2" id="example-title">How a call goes</h2>
+      <ol class="example-call">
+        <li><strong>Agent</strong> Aloha, thank you for calling Island Emergency Restoration. I'm the after hours automated call agent. Do you have an emergency?</li>
+        <li><strong>Caller</strong> There's water coming through my ceiling right now.</li>
+        <li><strong>Agent</strong> Got it, water coming through your ceiling right now. That's an emergency, we'll get someone on it. Can I get your name?</li>
+        <li><strong>Caller</strong> Mele Kahale.</li>
+        <li><strong>Agent</strong> Thanks, Mele. Can I get the best callback number for you?</li>
+        <li><strong>Caller</strong> 808 555 0199.</li>
+        <li><strong>Agent</strong> Let me read that back. Eight zero eight, five five five, zero one nine nine. Did I get that right?</li>
+        <li><strong>Caller</strong> Yes.</li>
+        <li class="example-alert"><strong>Text to the on-call tech</strong> New emergency. Mele Kahale, (808) 555-0199. Water actively coming through ceiling right now. Call back by 2:14 AM.</li>
+        <li><strong>Agent</strong> I'm sending this to our emergency standby team now, and they'll call you directly within the next fifteen minutes to get the details. Keep your phone close.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec-tight demo-why">
+    <div class="wrap">
+      <span class="kicker">Built for this business</span>
+      <h2 class="h2">The night shift that doesn't sleep</h2>
+      <ul class="why-grid why-four">
+        <li><h3>It picks up after hours</h3><p>When the office is closed, callers reach someone who can act, not a voicemail box.</p></li>
+        <li><h3>It knows what's an emergency</h3><p>Water, sewage and storm damage go to the on-call tech. Estimates and paperwork wait for business hours. A fire gets told to call 911.</p></li>
+        <li><h3>The tech gets a text they can act on</h3><p>Name, number, what's happening and when to call back, on the phone they already carry.</p></li>
+        <li><h3>It costs far less than a night shift</h3><p>No one has to sit by the phone all night. The agent handles the calls and the tech only hears about real emergencies.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec-tight on-ink demo-cta">
+    <div class="wrap">
+      <h2 class="h2">What would yours look like?</h2>
+      <p>Every business runs a little differently. Tell us how yours works and we'll talk through what a system built around it could do.</p>
+      <a class="btn" href="../contact.html" data-magnetic><span>Let's Connect</span><svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap-wide">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="../index.html" aria-label="Iterate, home"><!-- WORDMARK-SWAP: the wordmark is assets/img/wordmark.svg, drawn through a CSS mask. --><span class="wordmark" aria-hidden="true"></span><svg class="mark" viewBox="0 0 160 153.005" aria-hidden="true" focusable="false"><use href="#mark"/></svg></a>
+        <p class="footer-blurb">At Iterate, we solve real business problems with practical AI tools. We automate repetitive tasks, streamline workflows, and improve efficiency. Our solutions are simple, effective, and built to deliver results.</p>
+      </div>
+      <ul class="footer-links">
+        <li><a class="tlink" href="../what-we-do.html">What We Do</a></li>
+        <li><a class="tlink" href="../about.html">About</a></li>
+        <li><a class="tlink" href="../contact.html">Contact</a></li>
+      </ul>
+      <div class="footer-contact">
+        <a class="tlink" href="mailto:aloha@iteratehi.com">aloha@iteratehi.com</a>
+        <a class="tlink" href="tel:+18082044575">(808) 204-4575</a>
+      </div>
+    </div>
+    <div class="footer-bot">
+      <p>&copy; <span data-year>2026</span> Iterate. Honolulu, Hawaiʻi.</p>
+      <p><a class="tlink" href="../terms.html">Privacy and Terms</a></p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" defer></script>
+<script src="../assets/js/site.js" defer></script>
+<script src="../assets/js/demos/phone-logic.js" defer></script>
+<script src="../assets/js/demos/phone.js" defer></script>
+</body>
+</html>
