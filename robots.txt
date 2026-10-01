@@ -1,4 +1,12 @@
 User-agent: *
 Allow: /
+# The repo is the site, so everything committed is served. These are working
+# files, not pages.
+Disallow: /harvest/
+Disallow: /tools/
+Disallow: /templates/
+Disallow: /gas/
+Disallow: /CLAUDE.md
+Disallow: /README.md
 
 Sitemap: https://iteratehi.com/sitemap.xml
