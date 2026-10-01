@@ -1,0 +1,42 @@
+name: IndexNow ping
+on:
+  push:
+    branches: [main]
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for Pages deploy
+        run: sleep 90
+      - name: Notify IndexNow
+        run: |
+          # Bing (the index behind ChatGPT and Copilot) and the other IndexNow engines hear about
+          # pages that changed in the last three days. The list comes from the committed sitemap,
+          # whose dates come from git, so an untouched page isn't pinged again on every push.
+          # The checkout is read rather than the live file because the Pages CDN caches for about
+          # ten minutes.
+          URLS=$(python3 - <<'PY'
+          import datetime as dt, json, re
+          xml = open("sitemap.xml").read()
+          since = (dt.date.today() - dt.timedelta(days=3)).isoformat()
+          print(json.dumps([u for u, d in re.findall(r"<loc>([^<]+)</loc><lastmod>([^<]+)</lastmod>", xml) if d >= since]))
+          PY
+          )
+          COUNT=$(echo "$URLS" | jq 'length')
+          echo "Submitting $COUNT URLs"
+          [ "$COUNT" -gt 0 ] || exit 0
+          BODY=$(jq -nc \
+            --arg h "iteratehi.com" \
+            --arg k "dd54eafab5f2ca549f1a6111e23cf28e" \
+            --argjson u "$URLS" \
+            '{host: $h, key: $k, keyLocation: ("https://" + $h + "/" + $k + ".txt"), urlList: $u}')
+          CODE=$(curl -s -o answer.txt -w "%{http_code}" \
+            -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d "$BODY")
+          echo "IndexNow responded $CODE"
+          cat answer.txt; echo
+          # 200 and 202 mean accepted. Anything else is a warning on the run, not a failure, so a
+          # rejection shows in the Actions log without an email on every push.
+          case "$CODE" in 200|202) ;; *) echo "::warning title=IndexNow rejected::IndexNow answered $CODE" ;; esac

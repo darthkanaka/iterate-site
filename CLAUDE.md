@@ -24,6 +24,17 @@ It is built the same way as `~/Documents/Developer/elevate-site`. When something
 6. `harvest/` is the archive of the old site. Things are generated from it, never written into it.
 7. Every page passes axe with zero violations at 1440, 1024 and 390, with JavaScript off, and with reduced motion on.
 
+## Search and indexing
+
+The SEO and blog plan is the vault note `~/Documents/Obsidian/projects/iterate-seo-plan.md` (read its Status first). Build work for it happens on the `seo` branch and merges to `main` in small checked steps.
+
+- `.nojekyll` is at the root, so GitHub Pages serves files as they are. Without it, Jekyll turned `CLAUDE.md` and `harvest/*.md` into indexable pages. Everything committed is still served, so `robots.txt` disallows the working folders (`harvest/`, `tools/`, `templates/`, `gas/`) and the two Markdown files. Reports and raw data go in the vault, never here.
+- Every page's head carries the same set: title (60 characters or under), description (aim for 120 to 155), an absolute extensionless canonical (`https://iteratehi.com/about`), the Open Graph and Twitter tags including `og:site_name` and the image's alt, size and type, the icons, the manifest link, and one JSON-LD `@graph`. The home page has the business (ProfessionalService) and the WebSite; every other page has a BreadcrumbList; About adds the three founders as Person entries with ids `about#kawika`, `about#dave` and `about#ben`, which are also anchors on the page. Copy the head of a neighbouring page when adding one.
+- `sitemap.xml` is generated. Run `python3 tools/sitemap.py` after adding, removing or changing a page; it reads each page's canonical and takes the date from git. Never edit it by hand. `tools/check.mjs` fails if it is out of step with the pages.
+- `404.html` is the one page that uses root-relative paths (`/assets/...`), because GitHub serves it at whatever depth the missing address was. It is `noindex` and stays out of the sitemap.
+- On every push to `main`, `.github/workflows/indexnow.yml` tells Bing and the other IndexNow engines about pages whose sitemap date is within the last three days. The key is the `.txt` file at the root named after it. Don't delete or rename it.
+- `tools/check.mjs` finds pages on disk (the root, `demos/`, `blog/`), so a new page is checked without being added to a list. Its SEO pass fails on: not exactly one h1, a title over 60 characters, a missing description, a canonical that doesn't match the path, missing social tags, structured data that's missing or doesn't parse, an en or em dash anywhere in the text, or any name from the git-ignored `private/names-to-keep-out.txt` (skipped on a machine without that file). Short titles and descriptions outside 120 to 155 characters are warnings.
+
 ## Demos
 
 Interactive example apps live under `demos/`, each linked from its case study card. Live on iteratehi.com since 2026-09-30 (tag `demos-2026-09-30`). Plan, log and test results are in the vault notes `projects/iterate-demos.md` and `projects/iterate-demos-test-results.md`.
@@ -57,7 +68,8 @@ Client names do not appear anywhere in this public repo until that client has ap
 python3 -m http.server 8778                       # preview at http://localhost:8778
 python3 tools/vector.py <in.pdf|.ai> <out.svg>    # brand vector to a currentColor SVG
 python3 tools/vector.py --favicons                # favicons and mark-512.png from the HI mark
-node tools/check.mjs [base-url]                   # axe, overflow, JS off, reduced motion, rail
+python3 tools/sitemap.py                          # rewrite sitemap.xml from the pages (--check to test)
+node tools/check.mjs [base-url]                   # every page: axe, overflow, JS off, reduced motion, rail, SEO, sitemap
 node --test tools/test-*.mjs                      # every demo's logic
 node tools/check-<demo>.mjs                       # one demo, every control: inventory, portal, handyman, phone
 BROWSER=webkit node tools/check-<demo>.mjs        # the same in Safari's engine (or BROWSER=firefox); works for check.mjs too
