@@ -1,0 +1,13 @@
+{
+  "name": "Iterate",
+  "short_name": "Iterate",
+  "description": "Simple AI solutions for Hawaiʻi businesses.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#f0eee8",
+  "theme_color": "#f0eee8",
+  "icons": [
+    { "src": "/assets/img/icon-tree-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/img/mark-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

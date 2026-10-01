@@ -81,6 +81,7 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+[id] { scroll-margin-top: calc(var(--nav-h) + 20px); } /* a linked section isn't hidden under the fixed nav */
 
 body {
   margin: 0;
