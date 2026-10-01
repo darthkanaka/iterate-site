@@ -1,6 +1,10 @@
 // Automated checks for every page: console errors, failed requests,
 // horizontal overflow, axe (WCAG 2.1 A and AA plus best practice), JS off,
-// reduced motion, the mobile menu, and the case study rail.
+// reduced motion, the mobile menu, the case study rail, and an SEO pass (one h1,
+// title and description, canonical, social tags, structured data, no dashes or
+// client names in the text, and a sitemap that matches the pages).
+//
+// Pages are found on disk: every .html file at the root, in demos/ and in blog/.
 //
 //   node tools/check.mjs                       # against a local preview on :8778
 //   node tools/check.mjs https://darthkanaka.github.io/iterate-site/
@@ -10,6 +14,7 @@
 // pointing at that folder's node_modules. Exits non-zero on any failure.
 
 import { createRequire } from "module";
+import { existsSync, readdirSync, readFileSync } from "fs";
 const require = createRequire(import.meta.url);
 const playwright = require("playwright");
 // BROWSER=webkit (Safari's engine) or BROWSER=firefox runs the same checks there. Firefox
@@ -17,7 +22,19 @@ const playwright = require("playwright");
 const ENGINE = process.env.BROWSER || "chromium";
 
 const BASE = (process.argv[2] || "http://localhost:8778/").replace(/\/?$/, "/");
-const PAGES = ["", "what-we-do.html", "about.html", "contact.html", "terms.html", "demos/handyman.html", "demos/inventory.html", "demos/phone.html", "demos/portal.html"];
+const REPO = new URL("../", import.meta.url);
+const htmlIn = (dir) => existsSync(new URL(dir, REPO)) ? readdirSync(new URL(dir, REPO)).filter((f) => f.endsWith(".html")).sort().map((f) => dir + f) : [];
+// "" is the home page; index.html in a folder is that folder's page (blog/).
+const PAGES = ["", ...htmlIn("").filter((f) => f !== "index.html"), ...htmlIn("demos/"), ...htmlIn("blog/")];
+const SITE = "https://iteratehi.com/";
+// The canonical URL a page should declare: no .html, folders end in a slash.
+const canonicalFor = (path) => SITE + path.replace(/(^|\/)index\.html$/, "$1").replace(/\.html$/, "");
+// Real names kept out of public pages. The list is git-ignored, so on a machine without it
+// that part of the check is skipped.
+const NAMES_FILE = new URL("private/names-to-keep-out.txt", REPO);
+const NAMES = existsSync(NAMES_FILE) ? readFileSync(NAMES_FILE, "utf8").split("\n").map((l) => l.trim()).filter((l) => l && !l.startsWith("#")) : [];
+const warn = (msg) => console.log("  warn " + msg);
+const canonicals = [];
 const WIDTHS = [1440, 1024, 390];
 const AXE = "https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.10.3/axe.min.js";
 
@@ -33,6 +50,45 @@ async function scrollThrough(page) {
   }
   await page.waitForTimeout(1200);
   await page.evaluate(() => window.scrollTo(0, 0));
+}
+
+async function seo(page, path, name) {
+  const d = await page.evaluate(() => {
+    const meta = (sel) => document.querySelector(sel)?.getAttribute("content") ?? null;
+    const body = document.body.cloneNode(true);
+    body.querySelectorAll("script, style, noscript").forEach((n) => n.remove());
+    return {
+      h1: document.querySelectorAll("h1").length,
+      title: document.title,
+      description: meta('meta[name="description"]'),
+      noindex: /noindex/.test(meta('meta[name="robots"]') || ""),
+      canonical: document.querySelector('link[rel="canonical"]')?.getAttribute("href") ?? null,
+      og: ["og:title", "og:description", "og:image", "og:image:alt", "og:url", "og:site_name"].map((p) => [p, meta(`meta[property="${p}"]`)]),
+      tw: ["twitter:card", "twitter:title", "twitter:description", "twitter:image"].map((p) => [p, meta(`meta[name="${p}"]`)]),
+      ogUrl: meta('meta[property="og:url"]'),
+      ld: [...document.querySelectorAll('script[type="application/ld+json"]')].map((s) => s.textContent),
+      text: [document.title, meta('meta[name="description"]') || "", body.innerText].join("\n"),
+    };
+  });
+  const problems = [];
+  if (d.h1 !== 1) problems.push(`${d.h1} h1 headings`);
+  if (/[\u2013\u2014]/.test(d.text)) problems.push("a dash character in the text");
+  for (const n of NAMES) if (d.text.toLowerCase().includes(n.toLowerCase())) problems.push(`a name from the keep-out list`);
+  if (!d.noindex) {
+    if (!d.title) problems.push("no title");
+    else if (d.title.length > 60) problems.push(`title is ${d.title.length} characters`);
+    else if (d.title.length < 30) warn(`${name} title is short (${d.title.length}): ${d.title}`);
+    if (!d.description) problems.push("no description");
+    else if (d.description.length < 120 || d.description.length > 155) warn(`${name} description is ${d.description.length} characters (aim for 120 to 155)`);
+    const want = canonicalFor(path || "index.html");
+    if (d.canonical !== want) problems.push(`canonical is ${d.canonical}, expected ${want}`);
+    else canonicals.push(want);
+    if (d.ogUrl !== d.canonical) problems.push("og:url doesn't match the canonical");
+    for (const [p, v] of [...d.og, ...d.tw]) if (!v) problems.push(`no ${p}`);
+    if (!d.ld.length) problems.push("no structured data");
+    for (const j of d.ld) { try { JSON.parse(j); } catch (e) { problems.push("structured data doesn't parse"); } }
+  }
+  problems.length ? fail(`${name} seo: ${problems.join("; ")}`) : ok(`${name} seo`);
 }
 
 const browser = await playwright[ENGINE].launch();
@@ -89,6 +145,8 @@ for (const width of WIDTHS) {
       if (!res.ok()) fail(`${name} link ${href} returns ${res.status()}`);
     }
 
+    if (width === 1440) await seo(page, path, name);
+
     if (path === "" && mobile) {
       await page.click(".burger");
       const open = await page.evaluate(() => !document.getElementById("menu").hidden);
@@ -112,6 +170,19 @@ for (const width of WIDTHS) {
     }
     await page.close();
   }
+  await ctx.close();
+}
+
+console.log("\nSitemap");
+{
+  const ctx = await browser.newContext();
+  const res = await ctx.request.get(BASE + "sitemap.xml");
+  const listed = res.ok() ? [...(await res.text()).matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]) : [];
+  const missing = canonicals.filter((u) => !listed.includes(u));
+  const extra = listed.filter((u) => !canonicals.includes(u));
+  missing.length || extra.length || !res.ok()
+    ? fail(`sitemap: missing ${missing.join(", ") || "none"}; not a page ${extra.join(", ") || "none"} (run python3 tools/sitemap.py)`)
+    : ok(`sitemap lists exactly the ${listed.length} indexable pages`);
   await ctx.close();
 }
 
