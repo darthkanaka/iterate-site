@@ -14,3 +14,9 @@ harvest/export/
 
 # Named case study copy, public only once each client approves.
 private/
+
+# Local blog previews from tools/blog.py --preview, drafts included.
+.preview*/
+
+# Python's bytecode cache, from running the tools and their tests.
+__pycache__/

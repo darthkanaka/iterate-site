@@ -1,13 +1,17 @@
 // Automated checks for every page: console errors, failed requests,
 // horizontal overflow, axe (WCAG 2.1 A and AA plus best practice), JS off,
 // reduced motion, the mobile menu, the case study rail, and an SEO pass (one h1,
-// title and description, canonical, social tags, structured data, no dashes or
-// client names in the text, and a sitemap that matches the pages).
+// title and description, canonical, social tags, structured data, no dashes, no
+// client names in the text or in any address on the page, and a sitemap that
+// matches the pages).
 //
-// Pages are found on disk: every .html file at the root, in demos/ and in blog/.
+// Pages are found on disk: every .html file at the root, in demos/ and in blog/. CHECK_ROOT
+// points that search at another folder, such as a blog preview from tools/blog.py --preview,
+// served on its own port.
 //
 //   node tools/check.mjs                       # against a local preview on :8778
 //   node tools/check.mjs https://darthkanaka.github.io/iterate-site/
+//   CHECK_ROOT=.preview node tools/check.mjs http://localhost:8779/
 //
 // Needs Playwright, installed outside this repo so the site stays dependency
 // free: `npm i playwright` in any scratch folder, then run with NODE_PATH
@@ -15,6 +19,8 @@
 
 import { createRequire } from "module";
 import { existsSync, readdirSync, readFileSync } from "fs";
+import { resolve } from "path";
+import { pathToFileURL } from "url";
 const require = createRequire(import.meta.url);
 const playwright = require("playwright");
 // BROWSER=webkit (Safari's engine) or BROWSER=firefox runs the same checks there. Firefox
@@ -23,7 +29,9 @@ const ENGINE = process.env.BROWSER || "chromium";
 
 const BASE = (process.argv[2] || "http://localhost:8778/").replace(/\/?$/, "/");
 const REPO = new URL("../", import.meta.url);
-const htmlIn = (dir) => existsSync(new URL(dir, REPO)) ? readdirSync(new URL(dir, REPO)).filter((f) => f.endsWith(".html")).sort().map((f) => dir + f) : [];
+// Where the pages are found. The keep-out names list stays the repo's own.
+const ROOT = process.env.CHECK_ROOT ? pathToFileURL(resolve(process.env.CHECK_ROOT) + "/") : REPO;
+const htmlIn = (dir) => existsSync(new URL(dir, ROOT)) ? readdirSync(new URL(dir, ROOT)).filter((f) => f.endsWith(".html")).sort().map((f) => dir + f) : [];
 // "" is the home page; index.html in a folder is that folder's page (blog/).
 const PAGES = ["", ...htmlIn("").filter((f) => f !== "index.html"), ...htmlIn("demos/"), ...htmlIn("blog/")];
 const SITE = "https://iteratehi.com/";
@@ -33,6 +41,12 @@ const canonicalFor = (path) => SITE + path.replace(/(^|\/)index\.html$/, "$1").r
 // that part of the check is skipped.
 const NAMES_FILE = new URL("private/names-to-keep-out.txt", REPO);
 const NAMES = existsSync(NAMES_FILE) ? readFileSync(NAMES_FILE, "utf8").split("\n").map((l) => l.trim()).filter((l) => l && !l.startsWith("#")) : [];
+// Names and text are compared as lowercase words joined by hyphens, with no ʻokina, kahakō or
+// apostrophes (the same as nameKey in tools/blog.py), so "Hawaiʻi" matches "Hawaii", a name
+// broken across lines still matches, and so does a name in a web address or file name.
+const nameKey = (s) => s.normalize("NFKD").replace(/\p{M}/gu, "").replace(/[\u02BB'\u2019\u2018]/g, "")
+  .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+const NAME_KEYS = NAMES.map(nameKey).filter(Boolean);
 const warn = (msg) => console.log("  warn " + msg);
 const canonicals = [];
 const WIDTHS = [1440, 1024, 390];
@@ -68,12 +82,17 @@ async function seo(page, path, name) {
       ogUrl: meta('meta[property="og:url"]'),
       ld: [...document.querySelectorAll('script[type="application/ld+json"]')].map((s) => s.textContent),
       text: [document.title, meta('meta[name="description"]') || "", body.innerText].join("\n"),
+      urls: [location.pathname, ...[...document.querySelectorAll("[href], [src]")].map((e) => e.getAttribute("href") || e.getAttribute("src") || "")],
     };
   });
   const problems = [];
   if (d.h1 !== 1) problems.push(`${d.h1} h1 headings`);
   if (/[\u2013\u2014]/.test(d.text)) problems.push("a dash character in the text");
-  for (const n of NAMES) if (d.text.toLowerCase().includes(n.toLowerCase())) problems.push(`a name from the keep-out list`);
+  const said = nameKey(d.text), linked = d.urls.map(nameKey);
+  for (const k of NAME_KEYS) {
+    if (said.includes(k)) problems.push("a name from the keep-out list in the text");
+    if (linked.some((u) => u.includes(k))) problems.push("a name from the keep-out list in a web address or file name");
+  }
   if (!d.noindex) {
     if (!d.title) problems.push("no title");
     else if (d.title.length > 60) problems.push(`title is ${d.title.length} characters`);
@@ -93,7 +112,7 @@ async function seo(page, path, name) {
 
 const browser = await playwright[ENGINE].launch();
 if (ENGINE === "firefox") { const plain = browser.newContext.bind(browser); browser.newContext = ({ isMobile, ...o } = {}) => plain(o); }
-console.log(`engine: ${ENGINE}`);
+console.log(`engine: ${ENGINE}` + (process.env.CHECK_ROOT ? `, pages from ${resolve(process.env.CHECK_ROOT)}` : ""));
 
 for (const width of WIDTHS) {
   console.log(`\n${width}px`);

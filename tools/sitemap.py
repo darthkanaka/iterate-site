@@ -10,6 +10,9 @@ has uncommitted changes, otherwise its last commit. A post can pin its date with
     python3 tools/sitemap.py           write sitemap.xml
     python3 tools/sitemap.py --check   exit 1 if sitemap.xml is out of date
 
+tools/blog.py imports these functions with its own root to write the sitemap of a local
+blog preview, whose pages are mostly links back to this repo's files.
+
 Standard library only.
 """
 import argparse
@@ -25,38 +28,45 @@ SITEMAP = ROOT / "sitemap.xml"
 FOLDERS = ["", "demos", "blog"]  # where pages live, in the order they're listed
 
 
-def pages():
+def pages(root=ROOT):
     for folder in FOLDERS:
-        d = ROOT / folder
+        d = root / folder
         if not d.is_dir():
             continue
         files = sorted(d.glob("*.html"), key=lambda p: (p.name != "index.html", p.name))
         yield from files
 
 
-def git(*args):
-    return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True).stdout.strip()
+def git(*args, cwd=ROOT):
+    return subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True).stdout.strip()
 
 
 def lastmod(path, html):
     pinned = re.search(r'<meta property="article:modified_time" content="(\d{4}-\d{2}-\d{2})', html)
     if pinned:
         return pinned.group(1)
-    rel = str(path.relative_to(ROOT))
-    if git("status", "--porcelain", "--", rel):
+    # Ask git about the real file, so a page that is a link into this repo (a blog preview)
+    # gets that page's date. A file git doesn't know about is dated today.
+    real = path.resolve()
+    top = git("rev-parse", "--show-toplevel", cwd=real.parent)
+    if not top:
         return dt.date.today().isoformat()
-    return git("log", "-1", "--format=%cs", "--", rel) or dt.date.today().isoformat()
+    top = Path(top).resolve()
+    rel = str(real.relative_to(top))
+    if git("status", "--porcelain", "--", rel, cwd=top):
+        return dt.date.today().isoformat()
+    return git("log", "-1", "--format=%cs", "--", rel, cwd=top) or dt.date.today().isoformat()
 
 
-def entries():
+def entries(root=ROOT):
     out = []
-    for path in pages():
+    for path in pages(root):
         html = path.read_text(encoding="utf-8")
         if re.search(r'<meta name="robots" content="[^"]*noindex', html):
             continue
         canon = re.search(r'<link rel="canonical" href="([^"]+)"', html)
         if not canon:
-            sys.exit(f"{path.relative_to(ROOT)} has no canonical link, so it can't go in the sitemap")
+            sys.exit(f"{path.relative_to(root)} has no canonical link, so it can't go in the sitemap")
         out.append((canon.group(1), lastmod(path, html)))
     return out
 
