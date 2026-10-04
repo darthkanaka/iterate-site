@@ -35,6 +35,12 @@ The SEO and blog plan is the vault note `~/Documents/Obsidian/projects/iterate-s
 - On every push to `main`, `.github/workflows/indexnow.yml` tells Bing and the other IndexNow engines about pages whose sitemap date is within the last three days. The key is the `.txt` file at the root named after it. Don't delete or rename it.
 - `tools/check.mjs` finds pages on disk (the root, `demos/`, `blog/`), so a new page is checked without being added to a list. Its SEO pass fails on: not exactly one h1, a title over 60 characters, a missing description, a canonical that doesn't match the path, missing social tags, structured data that's missing or doesn't parse, an en or em dash anywhere in the text, or any name from the git-ignored `private/names-to-keep-out.txt` in the text or in any address on the page, ignoring the ʻokina, kahakō, apostrophes and line breaks (skipped on a machine without that file). Short titles and descriptions outside 120 to 155 characters are warnings.
 
+## Analytics and the contact form
+
+- Google Analytics `G-145CDMPNLN` is in the head of every hand-written page, right after the `js` class script, and `tools/blog.py` copies the same block from `what-we-do.html` into every post. It only loads on iteratehi.com and never when `navigator.webdriver` is set, so local previews and the Playwright suites never count as visits. `gtag()` always exists, so events never throw. Copy the block from a neighbouring page when adding one. Ads features are off and data is kept 14 months; the privacy policy in `terms.html` describes exactly this, so change both together.
+- Events (site.js section 13 and the form): `enquiry_sent` (method `form` or `email_app`), `demo_started` (the first tap or key inside a demo's `.app`, with the demo name), `phone_click`, `email_click`, `cta_click` (links to contact, with the label and page).
+- The contact form posts to the Apps Script web app in `gas/contact-notify.gs`, deployed under kawika@elevatemediahi.com. It logs each enquiry to the "Iterate website enquiries" Google Sheet, emails kawika@elevatemediahi.com with Reply-To set to the sender, and blind copies thekawikalopez@gmail.com so the morning briefing sees it. The URL is the form's `data-endpoint` in `contact.html`. Change the script with Manage deployments, pencil, New version, never New deployment, or the URL changes and the form breaks. Mailto stays as the fallback.
+
 ## Demos
 
 Interactive example apps live under `demos/`, each linked from its case study card. Live on iteratehi.com since 2026-09-30 (tag `demos-2026-09-30`). Plan, log and test results are in the vault notes `projects/iterate-demos.md` and `projects/iterate-demos-test-results.md`.
@@ -80,7 +86,7 @@ Natural and spoken, contractions on, no marketing filler, and no em dashes anywh
 | --- | --- | --- |
 | Wordmark | `assets/img/wordmark.svg`, drawn through a CSS mask. The `aspect-ratio` on `.wordmark` in site.css changes only if the new wordmark has different proportions | Kawika's new type logo arrives |
 | Enquiry address | `TO` at the top of site.js, plus the `mailto:` links in the footer and on the contact page | Google Workspace moves to iteratehi.com |
-| Form backend | Add `data-endpoint` to the `<form>`; site.js posts there and keeps mailto as the fallback | A backend is chosen (the Elevate Apps Script is the obvious one) |
+| Form backend | `data-endpoint` on the form in contact.html, the Apps Script in `gas/contact-notify.gs` | The script is redeployed as a New deployment (avoid this) |
 | Case study names | Anonymous headings only in index.html. Named versions are in `private/case-studies-named.md` (git-ignored) | Each client approves being named |
 | Phone | `(808) 204-4575` in the footer (not the nav, by Kawika's choice), contact page, terms, JSON-LD and `TEL` in site.js | Only if the number changes |
 

@@ -33,6 +33,12 @@
   function $(sel, root) { return (root || document).querySelector(sel); }
   function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
 
+  /* Analytics events go through gtag(), defined in each page's head. It only sends anything
+     on iteratehi.com in a real browser, so this is a no-op in previews and tests. */
+  function track(name, params) {
+    try { if (typeof window.gtag === "function") window.gtag("event", name, params || {}); } catch (e) {}
+  }
+
   function debounce(fn, ms) {
     var t;
     return function () {
@@ -678,6 +684,7 @@
         var endpoint = f.getAttribute("data-endpoint");
         if (!endpoint) {
           say("Opening your email app with this message ready to send. If nothing happens, email " + TO + " or call " + TEL + ".");
+          track("enquiry_sent", { method: "email_app" });
           mailto(d);
           return;
         }
@@ -691,10 +698,12 @@
         fetch(endpoint, { method: "POST", mode: "no-cors", body: params })
           .then(function () {
             say("Thanks " + d.first + ", it's sent. We'll be in touch soon.");
+            track("enquiry_sent", { method: "form" });
             f.reset();
           })
           .catch(function () {
             say("That didn't go through, so we're opening your email app with the message ready instead.");
+            track("enquiry_sent", { method: "email_app" });
             mailto(d);
           })
           .then(function () { if (btn) btn.disabled = false; });
@@ -702,7 +711,33 @@
     });
   })();
 
-  /* -- 13  Footer year --------------------------------------------------- */
+  /* -- 13  Analytics events -------------------------------------------- */
+  /* What counts for the monthly report: enquiries (in the form above), a visitor starting a
+     demo, and clicks on the phone number, the email address and Let's Connect. */
+
+  (function events() {
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest && e.target.closest("a[href]");
+      if (!a) return;
+      var href = a.getAttribute("href") || "";
+      if (/^tel:/.test(href)) track("phone_click", { page: location.pathname });
+      else if (/^mailto:/.test(href)) track("email_click", { page: location.pathname });
+      else if (/contact(\.html)?$/.test(href)) track("cta_click", { page: location.pathname, label: (a.textContent || "").trim().slice(0, 60) });
+    });
+    var app = $(".app");
+    if (!app) return;
+    var demo = (location.pathname.match(/demos\/([a-z-]+)/) || [])[1] || "unknown";
+    var started = false;
+    function start() {
+      if (started) return;
+      started = true;
+      track("demo_started", { demo: demo });
+    }
+    app.addEventListener("pointerdown", start, true);
+    app.addEventListener("keydown", start, true);
+  })();
+
+  /* -- 14  Footer year --------------------------------------------------- */
 
   (function year() {
     $$("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });

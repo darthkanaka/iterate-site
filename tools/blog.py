@@ -318,6 +318,10 @@ class Site:
         head = src.split("</head>", 1)[0]
         self.head_links = [depth1(x) for x in re.findall(
             r'<link rel="(?:icon|apple-touch-icon|manifest|preload)"[^>]*>', head)]
+        # The analytics snippet travels with the chrome, so posts count visits exactly like the
+        # hand-written pages (and, like them, skip previews and automated browsers).
+        ga = re.search(r"<script>\s*/\* Google Analytics.*?</script>", head, re.S)
+        self.analytics = ga.group(0) if ga else ""
         tc = re.search(r'<meta name="theme-color" content="([^"]+)"', head)
         self.theme_color = tc.group(1) if tc else "#f0eee8"
         alt = re.search(r'<meta property="og:image:alt" content="([^"]+)"', head)
@@ -883,8 +887,9 @@ def head(site, *, title, description, canonical, og_type, image, image_alt, extr
         "",
         jsonld(graph),
         '<script>document.documentElement.className += " js";</script>',
+        site.analytics,
     ]
-    return "\n".join(lines)
+    return "\n".join(x for x in lines if x is not None)
 
 
 def page(site, head_html, main_html):
