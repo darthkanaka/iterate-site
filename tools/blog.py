@@ -106,7 +106,7 @@ PILLARS = {
 }
 DEMOS = ("phone", "portal", "handyman", "inventory")
 WORDS = {"field-notes": (600, 900)}
-WORDS_DEFAULT = (1200, 2000)
+WORDS_DEFAULT = (800, 2000)  # as long as the answer needs; never padded (Kawika, 2026-10-04)
 MAX_WIDTH = 1600
 IDS_USED_BY_PAGE = {"main", "menu", "mark", "post-demo-title", "post-author-title",
                     "post-related-title", "post-cta-title", "post-list-title"}

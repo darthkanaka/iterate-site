@@ -305,7 +305,7 @@ class Validation(BlogTest):
     WARNINGS = [
         ("description too short", {"description": "Too short."}, BODY, "the description is 10 characters"),
         ("field notes too long", {"pillar": "field-notes"}, BODY, "aim for 600 to 900"),
-        ("education too short", {}, f"{LINKS}\n\n{FAQ}\n", "aim for 1,200 to 2,000"),
+        ("education too short", {}, f"{LINKS}\n\n{FAQ}\n", "aim for 800 to 2,000"),
         ("fewer than 3 internal links", {}, BODY.replace(LINKS, "No links here."), "0 links to our own pages"),
         ("no FAQ heading", {}, BODY.replace("## Questions owners ask", "## The end"), "no FAQ section"),
         ("colon in a sentence", {}, BODY + "\nHere's the thing: it works.\n", "a colon inside a sentence"),
