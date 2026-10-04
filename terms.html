@@ -60,6 +60,19 @@
 }
 </script>
 <script>document.documentElement.className += " js";</script>
+<script>
+/* Google Analytics (G-145CDMPNLN). Loads only on iteratehi.com and never in automated
+   browsers, so previews and the test suites don't count as visits. gtag() always exists,
+   so site.js can send events without checking. */
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+if (location.hostname === "iteratehi.com" && !navigator.webdriver) {
+  var ga = document.createElement("script"); ga.async = true;
+  ga.src = "https://www.googletagmanager.com/gtag/js?id=G-145CDMPNLN";
+  document.head.appendChild(ga);
+  gtag("js", new Date()); gtag("config", "G-145CDMPNLN");
+}
+</script>
 </head>
 <body>
 
@@ -105,7 +118,7 @@
     <div class="wrap legal">
       <span class="kicker">Legal</span>
       <h1 class="h1">Privacy Policy and Terms</h1>
-      <p class="eff">Effective date: September 23, 2026</p>
+      <p class="eff">Effective date: October 4, 2026</p>
       <p>This page explains how Iterate (&quot;Iterate,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) collects, uses, and protects your information, and the terms that apply to our text messages. Iterate is a trade name of Veex Photo LLC, a Hawaiʻi limited liability company.</p>
 
       <hr class="hairline">
@@ -119,21 +132,24 @@
         <li>What you tell us in your message, and how you heard about us</li>
         <li>A record of your consent to receive text messages, if you give it</li>
       </ul>
-      <p>This website does not use advertising trackers or sell data to anyone.</p>
+      <p>When you visit this website, Google Analytics also records how it's used: the pages you view, how you found the site, your general location (city or region, never your address), and the kind of device and browser you're using. It does this with cookies. This website does not use advertising trackers, and we do not sell data to anyone.</p>
       <h3>How we use it</h3>
       <ul>
         <li>To reply to your enquiry and talk with you about your project</li>
         <li>To send text messages about scheduling, reminders, and service updates, only if you opted in</li>
         <li>To keep a record of consent and opt-out requests, as the law requires</li>
+        <li>To see which pages are useful and how people find us, using Google Analytics. Its advertising features are switched off, so your visit isn't used to show you ads.</li>
       </ul>
+      <p>When you send the contact form, your message and details are saved in a private Google Sheet that only we can see, and emailed to us.</p>
       <h3>Sharing</h3>
-      <p>We do not sell, rent, or trade your personal information, and we do not share it with anyone for their marketing. Mobile numbers and SMS consent are never shared with third parties or affiliates for marketing purposes. We share information only with service providers who help us run the business (for example, our email and text messaging providers), and when the law requires it. Text messaging opt-in data and consent are never shared with any third party, except the text messaging providers that deliver our messages.</p>
+      <p>We do not sell, rent, or trade your personal information, and we do not share it with anyone for their marketing. Mobile numbers and SMS consent are never shared with third parties or affiliates for marketing purposes. We share information only with service providers who help us run the business (for example, Google, which runs our email, website analytics and the sheet that stores enquiries, and our text messaging providers), and when the law requires it. Text messaging opt-in data and consent are never shared with any third party, except the text messaging providers that deliver our messages.</p>
       <h3>How long we keep it</h3>
-      <p>We keep enquiry information for as long as we need it to work with you, and then delete it. If you opt out of text messages, we stop sending them but keep a record of your opt-out so we can honor it.</p>
+      <p>We keep enquiry information for as long as we need it to work with you, and then delete it. If you opt out of text messages, we stop sending them but keep a record of your opt-out so we can honor it. Google Analytics keeps visit data for 14 months and then deletes it.</p>
       <h3>Security</h3>
       <p>We use reasonable administrative, technical, and physical safeguards to protect your information. No system is perfectly secure, so we collect only what we need.</p>
       <h3>Your choices</h3>
       <p>You can ask us to show you, correct, or delete the information we hold about you by emailing <a class="tlink" href="mailto:aloha@iteratehi.com">aloha@iteratehi.com</a>. We will respond within a reasonable time.</p>
+      <p>You can stop Google Analytics from recording your visits by blocking cookies in your browser's settings, or with Google's opt-out add-on at <a class="tlink" href="https://tools.google.com/dlpage/gaoptout">tools.google.com/dlpage/gaoptout</a>.</p>
 
       <hr class="hairline">
       <h2 id="sms">SMS Terms</h2>
