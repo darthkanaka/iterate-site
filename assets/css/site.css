@@ -1411,16 +1411,17 @@ p:last-child { margin-bottom: 0; }
 /* 21  Positioning, service pages and Work ================================= */
 
 /* Home: "Tried doing it yourself?", in the steps design the process section used. */
-.diy-head { max-width: 62ch; }
-.diy-head .lede { margin: 22px 0 0; color: var(--muted); }
+.diy { --diy-gap: clamp(36px, 4vw, 56px); padding-block: clamp(52px, 6vw, 84px); }
+.diy-head .lede { margin: 18px 0 0; color: var(--muted); }
+.diy .steps { margin-top: var(--diy-gap); }
 .diy-cta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 18px 30px;
-  margin-top: clamp(32px, 4vw, 52px);
+  margin-top: var(--diy-gap);
 }
-.diy-cta p { margin: 0; font-size: clamp(1.05rem, 1.4vw, 1.25rem); max-width: 46ch; }
+.diy-cta p { margin: 0; font-size: clamp(1.05rem, 1.4vw, 1.25rem); }
 
 /* Home: the case study heading's side note and its link to the Work page. */
 .work-head-side { display: grid; gap: 10px; justify-items: start; }
