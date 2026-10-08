@@ -457,7 +457,9 @@ class Production(BlogTest):
             with self.subTest(f.name):
                 self.assertIn("<body>\n" + blog.MARKER, html)
                 self.assertNotRegex(html, "[\u2013\u2014]")
-                self.assertNotIn("aria-current", html)
+                # Only links to the blog itself are marked as the current page.
+                for a in re.findall(r'<a\b[^>]*aria-current="page"[^>]*>', html):
+                    self.assertIn('href="../blog/"', a)
                 self.assertIn('<header class="nav">', html)
                 self.assertIn('<nav class="nav-menu" id="menu" hidden aria-label="Mobile">', html)
                 self.assertIn('<footer class="footer">', html)
