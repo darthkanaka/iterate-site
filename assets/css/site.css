@@ -1410,43 +1410,9 @@ p:last-child { margin-bottom: 0; }
 
 /* 21  Positioning, service pages and Work ================================= */
 
-/* Home: "Tried doing it yourself?", three beats in the order owners live them. */
+/* Home: "Tried doing it yourself?", in the steps design the process section used. */
 .diy-head { max-width: 62ch; }
 .diy-head .lede { margin: 22px 0 0; color: var(--muted); }
-.diy-steps {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(20px, 2.4vw, 36px);
-  margin: clamp(40px, 5vw, 64px) 0 0;
-  padding: 0;
-  list-style: none;
-  counter-reset: diy;
-}
-@media (max-width: 900px) { .diy-steps { grid-template-columns: 1fr; } }
-.diy-step {
-  counter-increment: diy;
-  display: grid;
-  align-content: start;
-  gap: 14px;
-  padding: clamp(24px, 2.6vw, 36px);
-  background: var(--paper);
-  border-radius: var(--r-lg);
-  box-shadow: 0 1px 0 var(--line);
-}
-.diy-step::before {
-  content: counter(diy);
-  display: grid;
-  place-items: center;
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: var(--ink);
-  font-family: var(--btn);
-  font-weight: 600;
-}
-.diy-step:last-child { background: var(--ink); color: var(--on-ink); }
-.diy-step p { margin: 0; color: var(--muted); }
-.diy-step:last-child p { color: var(--on-ink-muted); }
 .diy-cta {
   display: flex;
   flex-wrap: wrap;
