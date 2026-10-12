@@ -420,7 +420,10 @@ class Production(BlogTest):
 
     def test_the_home_block_fills_only_between_the_markers(self):
         home = self.repo / "index.html"
-        original = home.read_text(encoding="utf-8")
+        # The real home page carries the markers, so this starts from a copy without them.
+        original = re.sub(r"[ \t]*<!-- blog:latest -->.*?<!-- /blog:latest -->\n", "",
+                          home.read_text(encoding="utf-8"), flags=re.S)
+        home.write_text(original, encoding="utf-8")
         self.write()
         self.build()
         self.assertEqual(home.read_text(encoding="utf-8"), original, "no markers, no change")

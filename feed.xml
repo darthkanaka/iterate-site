@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>Iterate blog</title>
+    <link>https://iteratehi.com/blog/</link>
+    <description>Plain-English answers about AI receptionists, automation and custom apps for small businesses, from the team that builds them in Honolulu.</description>
+    <language>en-us</language>
+    <atom:link href="https://iteratehi.com/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>What an AI receptionist is, and what it takes to run one</title>
+      <link>https://iteratehi.com/blog/what-is-an-ai-receptionist</link>
+      <guid isPermaLink="true">https://iteratehi.com/blog/what-is-an-ai-receptionist</guid>
+      <pubDate>Mon, 12 Oct 2026 06:00:00 -1000</pubDate>
+      <description>What an AI receptionist does, where it works best, how it compares to an answering service, and what it frees your team to do.</description>
+      <enclosure url="https://iteratehi.com/assets/img/blog/what-is-an-ai-receptionist/og.jpg" length="57566" type="image/jpeg" />
+    </item>
+  </channel>
+</rss>
